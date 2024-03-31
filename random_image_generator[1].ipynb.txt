@@ -1,0 +1,77 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "id": "xw742XMtSxVo"
+      },
+      "outputs": [],
+      "source": [
+        "from PIL import Image, ImageDraw\n",
+        "import random\n",
+        "import os\n",
+        "import csv\n",
+        "\n",
+        "# Create a directory to store generated images\n",
+        "os.makedirs(\"generated_images\", exist_ok=True)\n",
+        "\n",
+        "# Function to generate a random image and return metadata\n",
+        "def generate_random_image_and_metadata(width=200, height=200):\n",
+        "    # Create a blank image\n",
+        "    img = Image.new(\"RGB\", (width, height), \"white\")\n",
+        "\n",
+        "    # Get a drawing context\n",
+        "    draw = ImageDraw.Draw(img)\n",
+        "\n",
+        "    # Draw random shapes or patterns\n",
+        "    num_shapes = random.randint(1, 10)  # Change this range as needed\n",
+        "    for _ in range(num_shapes):\n",
+        "        x0 = random.randint(0, width)\n",
+        "        y0 = random.randint(0, height)\n",
+        "        x1 = random.randint(0, width)\n",
+        "        y1 = random.randint(0, height)\n",
+        "        color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))\n",
+        "        draw.rectangle([x0, y0, x1, y1], fill=color)\n",
+        "\n",
+        "    # Generate a unique filename for the image\n",
+        "    image_filename = f\"random_image_{random.randint(0, 1000000)}.png\"\n",
+        "\n",
+        "    # Save the image\n",
+        "    img.save(f\"generated_images/{image_filename}\")\n",
+        "\n",
+        "    # Return metadata\n",
+        "    return image_filename, width, height, num_shapes\n",
+        "\n",
+        "# Generate and save random images along with metadata in a CSV file\n",
+        "num_images = 5  # Change this number as needed\n",
+        "metadata = []\n",
+        "\n",
+        "for i in range(num_images):\n",
+        "    image_metadata = generate_random_image_and_metadata()\n",
+        "    metadata.append(image_metadata)\n",
+        "\n",
+        "# Write metadata to a CSV file\n",
+        "with open(\"/content/random image generation.csv\", \"w\", newline=\"\") as csvfile:\n",
+        "    writer = csv.writer(csvfile)\n",
+        "    writer.writerow([\"image_filename\", \"width\", \"height\", \"num_shapes\"])\n",
+        "    writer.writerows(metadata)\n",
+        "\n"
+      ]
+    }
+  ]
+}
